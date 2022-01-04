@@ -78,6 +78,7 @@ class ProcessFrame84(gym.ObservationWrapper):
 class BufferWrapper(gym.ObservationWrapper):
     def __init__(self, env, n_steps, dtype=np.float32):
         super(BufferWrapper, self).__init__(env)
+        self.buffer = None
         self.dtype = dtype
         old_space = env.observation_space
         self.observation_space = gym.spaces.Box(old_space.low.repeat(n_steps, axis=0),
@@ -99,11 +100,11 @@ class ImageToTensor(gym.ObservationWrapper):
         super(ImageToTensor, self).__init__(env)
         old_shape = self.observation_space.shape
         self.observation_space = gym.spaces.Box(low=0.0, high=1.0,
-                                                shape=(old_shape[-1], old_shape[0], old_shape[1]),
+                                                shape=(old_shape[0], old_shape[1], old_shape[2]),
                                                 dtype=np.float32)
 
     def observation(self, observation):
-        return np.moveaxis(observation, 2, 0)
+        return observation
 
 
 class ScaledFloatFrame(gym.ObservationWrapper):

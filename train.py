@@ -1,8 +1,13 @@
+# Original code from https://towardsdatascience.com/deep-q-network-dqn-ii-b6bf911b6b2c
+# Copyright 2020 by Jordi TORRES.AI
+# Copyright 2022 by Jiwoon Lee(@metr0jw)
+
 from env import MaxAndSkipEnv, FireResetEnv, ProcessFrame84, ImageToTensor, BufferWrapper, ScaledFloatFrame
 from experience import ExperienceReplay, Experience
 from agent import Agent
 import models
 
+import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow import Tensor, summary, constant
@@ -46,8 +51,8 @@ env = make_env(DEFAULT_ENV_NAME)
 input_shape = env.observation_space.shape
 n_output = env.action_space.n
 
-net = models.DQN(input_shape, n_output)
-target_net = models.DQN(input_shape, n_output)
+net = models.DQN(input_shape, n_output).model
+target_net = models.DQN(input_shape, n_output).model
 writer = summary.create_file_writer(DEFAULT_ENV_NAME)
 
 state_action_values = 0
@@ -79,10 +84,11 @@ while True:
 
         print("%d:  %d games, mean reward %.3f, (epsilon %.2f)" % (
             frame_idx, len(total_rewards), mean_reward, epsilon))
-
-        writer.add_scalar("epsilon", epsilon, frame_idx)
-        writer.add_scalar("reward_100", mean_reward, frame_idx)
-        writer.add_scalar("reward", reward, frame_idx)
+        with writer.as_default():
+            summary.scalar("epsilon", epsilon, step=frame_idx)
+            summary.scalar("reward_100", mean_reward, step=frame_idx)
+            summary.scalar("reward", reward, step=frame_idx)
+            writer.flush()
 
         if best_mean_reward is None or best_mean_reward < mean_reward:
             net.save(DEFAULT_ENV_NAME + "-best.h5")

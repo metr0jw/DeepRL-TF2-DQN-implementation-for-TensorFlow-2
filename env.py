@@ -1,3 +1,7 @@
+# Original code from https://towardsdatascience.com/deep-q-network-dqn-ii-b6bf911b6b2c
+# Copyright 2020 by Jordi TORRES.AI
+# Copyright 2022 by Jiwoon Lee(@metr0jw)
+
 import gym
 import collections
 import numpy as np

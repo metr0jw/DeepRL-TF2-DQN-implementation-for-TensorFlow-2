@@ -1,3 +1,7 @@
+# Original code from https://towardsdatascience.com/deep-q-network-dqn-ii-b6bf911b6b2c
+# Copyright 2020 by Jordi TORRES.AI
+# Copyright 2022 by Jiwoon Lee(@metr0jw)
+
 from experience import Experience
 from env import *
 
@@ -25,8 +29,8 @@ class Agent:
             state_a = np.array([self.state], copy=False)
             state_v = tf.constant(state_a)
             q_vals_v = net(state_v)
-            _, act_v = tf.math.reduce_max(q_vals_v, dim=1)
-            action = int(act_v.item())
+            act_v = tf.math.reduce_max(q_vals_v)
+            action = tf.cast(act_v, tf.int32)
 
         new_state, reward, is_done, _ = self.env.step(action)
         self.total_reward += reward

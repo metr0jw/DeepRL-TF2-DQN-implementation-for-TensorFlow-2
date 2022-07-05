@@ -10,7 +10,7 @@ import models
 import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import MeanSquaredError
-from tensorflow import Tensor, summary, constant
+from tensorflow import Tensor, summary, constant, gather, gather_nd, expand_dims, squeeze, reduce_max
 import numpy as np
 import collections
 import datetime
@@ -106,19 +106,19 @@ while True:
     batch = buffer.sample(batch_size)
     states, actions, rewards, dones, next_states = batch
 
-    states_v = Tensor(states)
-    next_states_v = Tensor(next_states)
-    actions_v = Tensor(actions)
-    rewards_v = Tensor(rewards)
+    states_v = constant(states)
+    actions_v = constant(actions)
+    rewards_v = constant(rewards)
     done_mask = constant(dones, dtype='uint8')
+    next_states_v = constant(next_states)
 
-    state_action_values = net(states_v).gather(1, actions_v.unsqueeze(-1)).squeeze(-1)
+    # state_action_values = net(states_v).gather(1, actions_v.unsqueeze(-1)).squeeze(-1)
+    state_action_values = squeeze(gather(net(states_v), expand_dims(actions_v, -1)))
 
-    next_state_values = target_net(next_states_v).max(1)[0]
+    next_state_values = reduce_max(target_net(next_states_v))[0]
 
-    next_state_values[done_mask] = 0.0
-
-    next_state_values = next_state_values.detach()
+    # next_state_values[done_mask] = 0.0
+    tf.stop_gradient(next_state_values)
 
     expected_state_action_values = next_state_values * gamma + rewards_v
 

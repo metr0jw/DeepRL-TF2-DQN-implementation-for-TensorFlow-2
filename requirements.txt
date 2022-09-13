@@ -16,7 +16,7 @@ colorama==0.4.5
 cycler==0.11.0
 Cython==0.29.30
 fasteners==0.17.3
-flatbuffers==1.12
+flatbuffers==2.0.7
 fonttools==4.33.3
 gast==0.4.0
 glfw==2.5.3

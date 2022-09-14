@@ -2,7 +2,7 @@ absl-py==1.1.0
 ale-py==0.7.5
 astunparse==1.6.3
 atomicwrites==1.4.0
-attrs==21.4.0
+attrs==22.1.0
 AutoROM==0.4.2
 AutoROM.accept-rom-license==0.4.2
 box2d-py==2.3.5

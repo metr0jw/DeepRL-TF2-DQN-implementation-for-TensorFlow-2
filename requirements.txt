@@ -30,7 +30,7 @@ h5py==3.7.0
 idna==3.3
 imageio==2.21.3
 importlib-metadata==4.12.0
-importlib-resources==5.8.0
+importlib-resources==5.10.0
 iniconfig==1.1.1
 keras==2.9.0
 Keras-Preprocessing==1.1.2

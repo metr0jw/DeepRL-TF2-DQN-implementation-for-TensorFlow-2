@@ -38,7 +38,7 @@ kiwisolver==1.4.3
 libclang==14.0.1
 lz4==4.0.1
 Markdown==3.3.7
-matplotlib==3.5.2
+matplotlib==3.7.0
 mock==4.0.3
 mujoco==2.2.0
 mujoco-py==2.1.2.14
